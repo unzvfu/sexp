@@ -20,7 +20,7 @@ private:
 
     const sexp *parse_atom();
     const sexp *parse_list();
-    
+
     void die_if(bool p, const char *msg) {
         if (p) {
             cerr << "Parse Error near byte " << pos << ": " << msg << endl;
@@ -29,18 +29,17 @@ private:
     }
 };
 
-const sexp *parser::parse_atom()
-{
+const sexp *parser::parse_atom() {
     char buf[MAX_LEN_DIGITS], *e;
     long bytesread, atomlen, bufbytes;
     atom *a;
-    
+
     is.getline(buf, MAX_LEN_DIGITS, LEN_DELIMIT);
     die_if( ! is, "atom length delimiter not found");
     bytesread = (long) is.gcount();
-    
+
     atomlen = strtol(buf, &e, LEN_BASE);
-    // +1 because istream::gcount() counts the delimeter
+    // +1 because istream::gcount() counts the delimiter
     bufbytes = e - buf + 1;
     pos += bufbytes;
     die_if(bufbytes != bytesread, "non-numeric characters in length field");
@@ -65,7 +64,7 @@ const sexp *parser::parse_list() {
     lst = new list;
     while (is && is.get() != CLOSE_PAREN) {
         const sexp *s;
-        
+
         is.unget();
         s = parse_sexp();
         lst->sexps.push_back(s);
@@ -81,7 +80,6 @@ const sexp *parser::parse_sexp() {
     return (c == OPEN_PAREN) ? parse_list() : parse_atom();
 }
 
-static const sexp *sexp::create(istream &is)
-{
+static const sexp *sexp::create(istream &is) {
     return parser(is).parse_sexp();
 }

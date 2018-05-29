@@ -3,12 +3,12 @@
 
 /*
  * Usage:
- * 
+ *
  *  int main() {
  *      istream &is = cin;
  *      while (is && is.get() != EOF) {
  *          is.unget();
- *  
+ *
  *          const sexp *s = sexp::create(is);
  *          myvisitor v;
  *          s->accept(v);
